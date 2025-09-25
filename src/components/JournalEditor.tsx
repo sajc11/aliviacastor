@@ -1,9 +1,10 @@
-import useImage from 'use-image';
+// src/components/JournalEditor.tsx
 import { useEffect, useRef, useState } from 'react';
+import useImage from 'use-image';
+import { nanoid } from 'nanoid';
 import { supabase } from '../lib/supabase';
 import { uploadJournalThumb } from '../lib/storage';
 import StickerPalette from './StickerPalette';
-import { nanoid } from 'nanoid';
 
 type NodeT = {
   id: string;
@@ -29,7 +30,7 @@ type NodeT = {
 };
 
 export default function JournalEditor() {
-  // Lazy-load react-konva only in the browser
+  // Lazy-load react-konva only in the browser (prevents SSR errors)
   const [RK, setRK] = useState<any>(null);
   useEffect(() => {
     let mounted = true;
@@ -42,13 +43,10 @@ export default function JournalEditor() {
       mounted = false;
     };
   }, []);
-
-  // If SSR or module not yet loaded, render nothing
   if (typeof window === 'undefined' || !RK) return null;
 
   const { Stage, Layer, Rect, Image: KImage, Text: KText, Transformer } = RK;
 
-  // State & refs
   const stageRef = useRef<any>(null);
   const trRef = useRef<any>(null);
 
@@ -63,7 +61,7 @@ export default function JournalEditor() {
   const passRef = useRef<HTMLInputElement | null>(null);
   const titleRef = useRef<HTMLInputElement | null>(null);
 
-  // Resize observer to keep canvas responsive
+  // Responsive sizing
   useEffect(() => {
     const el = wrapRef.current;
     if (!el) return;
@@ -71,12 +69,11 @@ export default function JournalEditor() {
     ro.observe(el);
     return () => ro.disconnect();
   }, []);
-
   const baseW = 1000;
   const baseH = 640;
   const scale = wrapW ? Math.min(1, wrapW / baseW) : 1;
 
-  // Helpers
+  // Helpers to create nodes
   function addText() {
     const s = 24;
     setNodes((n) => [
@@ -92,9 +89,7 @@ export default function JournalEditor() {
     setNodes((n) => [...n, { id: nanoid(), type: 'sticker', x: 160, y: 160, url }]);
   }
 
-  function onDragEnd(id: string, x: number, y: number) {
-    setNodes((s) => s.map((m) => (m.id === id ? { ...m, x, y } : m)));
-  }
+  // Reorder helpers (optional UI buttons could call these)
   function bringFront(id: string) {
     setNodes((s) => {
       const i = s.findIndex((n) => n.id === id);
@@ -116,7 +111,7 @@ export default function JournalEditor() {
     });
   }
 
-  // Keep selection transformer synced
+  // Sync Transformer with current selection
   useEffect(() => {
     if (!trRef.current || !stageRef.current) return;
     const st = stageRef.current;
@@ -125,10 +120,22 @@ export default function JournalEditor() {
     trRef.current.getLayer()?.batchDraw();
   }, [selected, nodes]);
 
-  // Image node renderer using useImage
+  // Konva image wrapper using useImage
   function Img({ url, ...rest }: any) {
     const [img] = useImage(url, 'anonymous');
     return img ? <KImage image={img} {...rest} /> : null;
+  }
+
+  function snapPos(x: number, y: number) {
+    if (!snap) return { x, y };
+    return {
+      x: Math.round(x / grid) * grid,
+      y: Math.round(y / grid) * grid,
+    };
+  }
+
+  function onDragEnd(id: string, x: number, y: number) {
+    setNodes((s) => s.map((m) => (m.id === id ? { ...m, x, y } : m)));
   }
 
   async function saveEntry() {
@@ -138,7 +145,7 @@ export default function JournalEditor() {
       alert('Please sign in first');
       return;
     }
-    // Save the doc
+
     const ins = await supabase
       .from('journal_entries')
       .insert({ user_id: u.user.id, title, doc: { nodes }, is_highlight: true })
@@ -154,8 +161,8 @@ export default function JournalEditor() {
       const dataUrl = stageRef.current.toDataURL({ pixelRatio: 2 });
       const signed = await uploadJournalThumb(u.user.id, ins.data.id, dataUrl);
       await supabase.from('journal_entries').update({ thumb_url: signed }).eq('id', ins.data.id);
-    } catch (e) {
-      // ignore thumb failure
+    } catch {
+      // thumbnail generation failure is non-blocking
     }
 
     alert('Saved');
@@ -187,7 +194,7 @@ export default function JournalEditor() {
           }}
         >
           <Layer>
-            {/* grid */}
+            {/* Grid */}
             {snap &&
               Array.from({ length: Math.ceil(baseW / grid) }).map((_, i) => (
                 <Rect key={'v' + i} x={i * grid} y={0} width={1} height={baseH} fill="#e5e7eb" opacity={0.3} />
@@ -197,8 +204,10 @@ export default function JournalEditor() {
                 <Rect key={'h' + i} x={0} y={i * grid} width={baseW} height={1} fill="#e5e7eb" opacity={0.3} />
               ))}
 
+            {/* Paper */}
             <Rect x={0} y={0} width={baseW} height={baseH} cornerRadius={24} fill="#f8fafc" />
 
+            {/* Nodes */}
             {nodes
               .filter((n) => n.visible !== false)
               .map((n) =>
@@ -210,8 +219,8 @@ export default function JournalEditor() {
                     x={n.x}
                     y={n.y}
                     fontSize={n.size || 24}
-                    fontFamily={n.font}
-                    fill={n.color}
+                    fontFamily={n.font || 'Space Grotesk'}
+                    fill={n.color || '#111'}
                     stroke={n.outlineColor || '#000'}
                     strokeWidth={n.outlineWidth || 0}
                     shadowColor={n.shadowColor || 'rgba(0,0,0,0.35)'}
@@ -228,13 +237,9 @@ export default function JournalEditor() {
                       setNodes((s) => s.map((m) => (m.id === n.id ? { ...m, text: t || '' } : m)));
                     }}
                     onDragEnd={(e: any) => {
-                      let { x, y } = e.target.position();
-                      if (snap) {
-                        x = Math.round(x / grid) * grid;
-                        y = Math.round(y / grid) * grid;
-                        e.target.position({ x, y });
-                      }
-                      onDragEnd(n.id, x, y);
+                      const p = snapPos(e.target.x(), e.target.y());
+                      e.target.position(p);
+                      onDragEnd(n.id, p.x, p.y);
                     }}
                   />
                 ) : (
@@ -250,13 +255,9 @@ export default function JournalEditor() {
                       else setSelected([n.id]);
                     }}
                     onDragEnd={(e: any) => {
-                      let { x, y } = e.target.position();
-                      if (snap) {
-                        x = Math.round(x / grid) * grid;
-                        y = Math.round(y / grid) * grid;
-                        e.target.position({ x, y });
-                      }
-                      onDragEnd(n.id, x, y);
+                      const p = snapPos(e.target.x(), e.target.y());
+                      e.target.position(p);
+                      onDragEnd(n.id, p.x, p.y);
                     }}
                   />
                 )
@@ -270,43 +271,99 @@ export default function JournalEditor() {
       {/* Sidebar column */}
       <aside className="space-y-4 rounded-2xl border p-4">
         <h3 className="font-semibold">Journal tools</h3>
-        <input ref={titleRef} placeholder="Entry title" className="mt-1 w-full rounded-md border p-2" />
 
+        {/* Entry title */}
+        <label className="block text-sm font-medium" htmlFor="entry-title">
+          Entry title
+        </label>
+        <input
+          id="entry-title"
+          ref={titleRef}
+          placeholder="Entry title"
+          aria-label="Entry title"
+          title="Entry title"
+          className="mt-1 w-full rounded-md border p-2"
+        />
+
+        {/* Add content */}
         <div className="mt-2 flex flex-wrap gap-2">
-          <button onClick={addText} className="rounded bg-slate-900 px-3 py-1 text-white">
+          <button
+            onClick={addText}
+            className="rounded bg-slate-900 px-3 py-1 text-white"
+            aria-label="Add text"
+            title="Add text"
+          >
             Add text
           </button>
-          <label className="cursor-pointer rounded border px-3 py-1">
+
+          <label className="cursor-pointer rounded border px-3 py-1" title="Add image">
             Add image
             <input
               type="file"
               accept="image/*"
               className="hidden"
               onChange={(e) => e.target.files && addImageFromFile(e.target.files[0])}
+              aria-label="Add image file"
+              title="Add image file"
             />
           </label>
         </div>
 
+        {/* Stickers */}
         <StickerPalette onPick={(u) => addSticker(u)} />
 
-        <div className="mt-2 flex items-center justify-between text-sm">
-          <label className="flex items-center gap-2">
-            <input type="checkbox" checked={snap} onChange={(e) => setSnap(e.target.checked)} /> Snap to grid
+        {/* Grid options */}
+        <div className="mt-2 flex items-center justify-between text-sm" role="group" aria-label="Grid options">
+          <label className="flex items-center gap-2" htmlFor="snap-to-grid">
+            <input
+              id="snap-to-grid"
+              type="checkbox"
+              checked={snap}
+              onChange={(e) => setSnap(e.target.checked)}
+              aria-label="Snap to grid"
+              title="Snap to grid"
+            />
+            Snap to grid
           </label>
-          <input
-            type="number"
-            min={4}
-            max={64}
-            step={2}
-            value={grid}
-            onChange={(e) => setGrid(Number(e.target.value) || 16)}
-            className="w-16 rounded border p-1"
-          />
+
+          <label htmlFor="grid-size" className="flex items-center gap-2">
+            <span>Grid size</span>
+            <input
+              id="grid-size"
+              type="number"
+              min={4}
+              max={64}
+              step={2}
+              value={grid}
+              onChange={(e) => setGrid(Number(e.target.value) || 16)}
+              className="w-16 rounded border p-1"
+              aria-label="Grid size"
+              title="Grid size"
+            />
+          </label>
         </div>
 
+        {/* Optional password + Save */}
         <div className="mt-2 space-y-2">
-          <input ref={passRef} type="password" placeholder="Optional encryption password" className="w-full rounded-md border p-2" />
-          <button onClick={saveEntry} className="w-full rounded-md bg-emerald-600 px-4 py-2 font-semibold text-white">
+          <label htmlFor="enc-pass" className="sr-only">
+            Encryption password
+          </label>
+          <input
+            id="enc-pass"
+            ref={passRef}
+            type="password"
+            placeholder="Optional encryption password"
+            aria-label="Encryption password"
+            title="Encryption password"
+            className="w-full rounded-md border p-2"
+          />
+
+          <button
+            onClick={saveEntry}
+            className="w-full rounded-md bg-emerald-600 px-4 py-2 font-semibold text-white"
+            aria-label="Save entry"
+            title="Save entry"
+          >
             Save entry
           </button>
         </div>

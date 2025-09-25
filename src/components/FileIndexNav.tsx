@@ -8,7 +8,6 @@ export default function FileIndexNav({ query='' }: { query?: string }){
   ];
 const PLAY: [string,string][] = [
   ['Creative Home','/creative'],
-  ['Curation','/curation'],          // ← add this line
   ['Journal','/journal'],
   ['Calendar','/calendar'],
   ['Library','/library'],
