@@ -1,0 +1,15 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import WebLanding from '../components/WebLanding';
+---
+<BaseLayout title="Creative | Alivia Castor">
+  <section class="mx-auto w-full max-w-6xl px-4 py-12 sm:px-6 bg-black rounded-3xl">
+    <div class="mb-6 flex items-center justify-between">
+      <h1 class="y2k-title font-display text-4xl font-bold text-white">Creative Playground</h1>
+      <button onclick="window.dispatchEvent(new CustomEvent('cabinet-open'))" class="rounded-full bg-[#FFD84A] px-4 py-2 font-semibold text-black shadow-[0_2px_0_#000]">
+        Open Cabinet
+      </button>
+    </div>
+    <WebLanding client:load />
+  </section>
+</BaseLayout>

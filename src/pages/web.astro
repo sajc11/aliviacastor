@@ -1,0 +1,10 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import WebLanding from '../components/WebLanding';
+---
+<BaseLayout title="Web Hub | Alivia Castor">
+  <section class="mx-auto w-full max-w-6xl px-4 py-12 sm:px-6 bg-black rounded-3xl">
+    <h1 class="font-display text-4xl font-semibold text-white">Interactive Web</h1>
+    <WebLanding client:load />
+  </section>
+</BaseLayout>

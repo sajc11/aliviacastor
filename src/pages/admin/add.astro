@@ -1,0 +1,11 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import LibraryAdmin from '../../components/admin/LibraryAdmin';
+---
+<BaseLayout title="Add Book/DVD | Admin">
+  <section class="mx-auto w-full max-w-5xl px-4 py-12 sm:px-6">
+    <h1 class="font-display text-3xl font-semibold">Add Book / DVD</h1>
+    <p class="mt-2 text-sm text-slate-600">Create entries and upload cover/spine images. (Requires Supabase auth.)</p>
+    <LibraryAdmin client:load />
+  </section>
+</BaseLayout>

@@ -1,0 +1,70 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+<BaseLayout title="CV | Sophia Castor">
+  <section class="mx-auto w-full max-w-5xl px-4 py-12 sm:px-6">
+    <header class="mb-8">
+      <h1 class="font-display text-4xl font-semibold">Sophia Castor — CV</h1>
+      <p class="mt-2 text-slate-700">Principal-level AI/ML researcher with human–machine teaming, trusted mission AI, and resilient sensor-driven systems experience.</p>
+    </header>
+
+    <section class="paper rounded-2xl border p-6">
+      <h2 class="font-display text-2xl font-semibold">Professional Summary</h2>
+      <p class="mt-2 text-slate-700">Summary content pulled from your CV: mission AI, agentic/LLMs, GNNs, federated learning, cognitive models with neuroimaging, IoT decision-support, and high-visibility publishing (PETS 2025).</p>
+    </section>
+
+    <section class="mt-8 grid gap-6 md:grid-cols-2">
+      <div class="rounded-2xl border p-6">
+        <h3 class="font-display text-xl font-semibold">Education</h3>
+        <ul class="mt-3 list-disc pl-6 text-sm leading-6 text-slate-700">
+          <li>Masters in Data Science & Analytics — Georgetown University (Expected Dec 2025)</li>
+          <li>B.S. Computer Science — Georgetown University (May 2025)</li>
+          <li>B.A. Government — Georgetown University (May 2025)</li>
+        </ul>
+      </div>
+      <div class="rounded-2xl border p-6">
+        <h3 class="font-display text-xl font-semibold">Honors & Awards</h3>
+        <ul class="mt-3 list-disc pl-6 text-sm leading-6 text-slate-700">
+          <li>Data Science & Analytics Returning Student Scholarship (2025–26)</li>
+          <li>Fritz Family Fellowship for Tech and Society (2024–25)</li>
+          <li>Massive Data Institute Scholar (2024–25)</li>
+          <li>Dean’s List (multiple terms)</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="mt-8 rounded-2xl border p-6">
+      <h3 class="font-display text-xl font-semibold">Publications (selected)</h3>
+      <ul class="mt-3 list-disc pl-6 text-sm leading-6 text-slate-700">
+        <li>SCIF: Privacy-Preserving Statistics Collection with Input Validation and Full Security — PETS 2025</li>
+        <li>Hachiko — AI clinical assistant for veterinary medical records (2025)</li>
+        <li>Undergraduate Honors Thesis — Multi-Modal Biometric Identity Detection and Tracking System (2025)</li>
+      </ul>
+    </section>
+
+    <section class="mt-8 rounded-2xl border p-6">
+      <h3 class="font-display text-xl font-semibold">Experience (selected)</h3>
+      <ul class="mt-3 list-disc pl-6 text-sm leading-6 text-slate-700">
+        <li>Leidos — Formal Methods Researcher Intern (SUNS IRAD)</li>
+        <li>ANI.ML Health — Principal Data Science & ML Researcher</li>
+        <li>Leidos — Software Dev & Webtools Engineer Intern</li>
+        <li>Georgetown MDI — Undergraduate Research Scholar</li>
+      </ul>
+    </section>
+
+    <section class="mt-8 rounded-2xl border p-6">
+      <h3 class="font-display text-xl font-semibold">Skills</h3>
+      <p class="mt-2 text-sm leading-6 text-slate-700">LLMs, Agentic AI, GNNs, federated learning; PETs (DP, MPC, ZK), formal methods; Python/Rust/Go/JS; DevOps, cloud; neuroimaging pipelines; visualization.</p>
+    </section>
+  </section>
+</BaseLayout>
+
+
+  <section class="mt-8 rounded-2xl border p-6">
+    <h3 class="font-display text-xl font-semibold">Full CV (PDF)</h3>
+    <div class="mt-3 overflow-hidden rounded-lg border">
+      <object data="/cv.pdf" type="application/pdf" class="h-[80vh] w-full">
+        <iframe src="/cv.pdf" class="h-[80vh] w-full"></iframe>
+      </object>
+    </div>
+  </section>

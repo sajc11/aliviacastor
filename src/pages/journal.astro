@@ -1,0 +1,11 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import JournalEditor from '../components/JournalEditor';
+---
+
+<BaseLayout title="Journal">
+  <section class="mx-auto w-full max-w-6xl px-4 py-12 sm:px-6">
+    <!-- IMPORTANT: client-only prevents SSR from importing react-konva/konva -->
+    <JournalEditor client:only="react" />
+  </section>
+</BaseLayout>

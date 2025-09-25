@@ -1,0 +1,10 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import StickerCalendar from '../components/StickerCalendar';
+---
+<BaseLayout title="Calendar | Alivia Castor">
+  <section class="mx-auto w-full max-w-6xl px-4 py-12 sm:px-6">
+    <h1 class="font-display text-3xl font-semibold">Sticker Calendar</h1>
+    <StickerCalendar client:load />
+  </section>
+</BaseLayout>

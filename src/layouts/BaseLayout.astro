@@ -1,0 +1,126 @@
+---
+import '../styles/global.css';
+import ModeToggle from '../components/ModeToggle';
+import GearSettings from '../components/GearSettings';
+import CursorSparkles from '../components/CursorSparkles';
+import CabinetOverlay from '../components/CabinetOverlay';
+import TopEdgeOpener from '../components/TopEdgeOpener';
+import EnvProbe from '../components/EnvProbe';
+
+const {
+  title = 'Alivia Castor',
+  description = 'Alivia Castor — Engineer & Creative Technologist'
+} = Astro.props;
+---
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <title>{title}</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=Silkscreen:wght@400;700&family=VT323&family=Press+Start+2P&family=Rubik+Mono+One&display=swap"
+      rel="stylesheet"
+    />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content="/og-cover.png" />
+  </head>
+
+  <body data-mode="professional">
+    <div class="relative flex min-h-screen flex-col">
+      <header class="sticky top-0 z-50 border-b border-white/10 bg-slate-900/60 text-white shadow-sm">
+        <div class="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-4 sm:px-6">
+
+          <a href="/" class="font-display text-lg font-semibold tracking-tight">
+            Alivia Castor
+          </a>
+
+          <!-- Professional nav -->
+          <nav aria-label="Professional" class="pro-nav flex items-center gap-4 text-sm font-medium">
+            <a href="/" class="text-white/80 transition hover:text-white">Home</a>
+            <a href="/academic" class="text-white/80 transition hover:text-white">Academic</a>
+            <a href="/industry" class="text-white/80 transition hover:text-white">Industry</a>
+            <a href="/research" class="text-white/80 transition hover:text-white">Research</a>
+            <a href="/publications" class="text-white/80 transition hover:text-white">Publications</a>
+            <a href="/about" class="text-white/80 transition hover:text-white">About</a>
+            <a href="/cv" class="text-white/80 transition hover:text-white">CV</a>
+
+            <!-- Toggle + Gear -->
+            <ModeToggle client:load />
+            <GearSettings client:load />
+          </nav>
+
+          <!-- Creative nav -->
+          <nav aria-label="Creative" class="personal-nav hidden items-center gap-3 text-sm font-medium">
+            <button
+              onclick="window.dispatchEvent(new CustomEvent('cabinet-open'))"
+              class="rounded-full bg-[#FFD84A] px-4 py-2 font-semibold text-black shadow-[0_2px_0_#000]"
+            >
+              Open Cabinet
+            </button>
+
+            <!-- Cabinet is only needed in Creative mode -->
+            <CabinetOverlay client:load />
+
+            <!-- Toggle + Gear -->
+            <ModeToggle client:load />
+            <GearSettings client:load />
+          </nav>
+        </div>
+      </header>
+
+      <TopEdgeOpener client:load />
+
+      <main class="flex-1">
+        <slot />
+      </main>
+
+      <footer class="border-t border-slate-200/40 bg-white/70 py-10 text-sm text-slate-600">
+        <div class="mx-auto flex w-full max-w-6xl flex-col gap-4 px-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+          <p>© {new Date().getFullYear()} Alivia Castor. Built with Astro & React.</p>
+          <div class="flex flex-wrap items-center gap-4">
+            <a href="mailto:hello@aliviacastor.dev" class="transition hover:text-slate-900">hello@aliviacastor.dev</a>
+            <a href="https://github.com/aliviacastor" class="transition hover:text-slate-900">GitHub</a>
+            <a href="https://www.linkedin.com/in/aliviacastor" class="transition hover:text-slate-900">LinkedIn</a>
+          </div>
+        </div>
+      </footer>
+
+      <!-- Cursor effects (can be toggled from the gear) -->
+      <CursorSparkles client:load />
+    </div>
+
+    <!-- Switch navs when mode changes -->
+    <script>
+      (function () {
+        function sync() {
+          const isPersonal = document.body.dataset.mode === 'personal';
+          document.querySelector('.pro-nav')?.classList.toggle('hidden', isPersonal);
+          document.querySelector('.personal-nav')?.classList.toggle('hidden', !isPersonal);
+        }
+        sync();
+        window.addEventListener('modechange', sync);
+      })();
+    </script>
+
+    <!-- Body class helpers for cabinet peek/open -->
+    <script>
+      (function () {
+        const b = document.body;
+        window.addEventListener('cabinet-peek', () => b.classList.add('peeking'));
+        window.addEventListener('cabinet-peek-end', () => b.classList.remove('peeking'));
+        window.addEventListener('cabinet-open', () => b.classList.add('cabinet-open'));
+        window.addEventListener('cabinet-close', () => b.classList.remove('cabinet-open'));
+      })();
+    </script>
+
+    <!-- Make __ENV / __supabase available everywhere -->
+    <EnvProbe client:load />
+  </body>
+</html>

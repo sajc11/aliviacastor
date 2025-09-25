@@ -1,0 +1,10 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PhotoSphere from '../components/PhotoSphere';
+---
+<BaseLayout title="Photo Sphere">
+  <section class="mx-auto w-full max-w-6xl px-4 py-12 sm:px-6">
+    <h1 class="font-display text-3xl font-semibold">Photo Sphere</h1>
+    <PhotoSphere client:load />
+  </section>
+</BaseLayout>
