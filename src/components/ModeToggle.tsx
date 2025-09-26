@@ -23,8 +23,8 @@ export default function ModeToggle(){
 
   return (
     <button onClick={swap}
-      className="relative inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm font-medium text-white shadow-md transition hover:scale-105 hover:bg-white/20">
-      <span className="flex h-6 w-6 items-center justify-center rounded-full bg-black/30 text-xs font-semibold">{mode==='professional'?'Pro':'Play'}</span>
+      className="relative inline-flex items-center gap-3 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-medium text-neutral-900 shadow-md transition hover:scale-105 hover:bg-white/20">
+      <span className="flex h-7 w-35 items-center justify-center rounded-full bg-black/30 text-xs font-regular text-neutral-900">{mode==='professional'?'Pro':'Play'}</span>
       <span className="hidden sm:inline">{mode==='professional'?'Play':'Pro'}</span>
     </button>
   );

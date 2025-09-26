@@ -126,8 +126,8 @@ export default function AddBookModal({ open, onClose, onAdded }: Props) {
               <input
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                placeholder="e.g., S,M,L,XL"
-                className={`mt-1 w-full rounded border border-violet-300 bg-white p-2 text-slate-900 placeholder:text-slate-400 ${accent}`}
+                placeholder="e.g., The Hunger Games"
+                className={`text-xs mt-1 w-full rounded border border-violet-300 bg-white p-2 text-slate-900 placeholder:text-slate-400 ${accent}`}
               />
             </label>
             <label className="text-sm font-medium">
@@ -135,8 +135,8 @@ export default function AddBookModal({ open, onClose, onAdded }: Props) {
               <input
                 value={author}
                 onChange={(e) => setAuthor(e.target.value)}
-                placeholder="e.g., Rem Koolhaas"
-                className={`mt-1 w-full rounded border border-sky-300 bg-white p-2 text-slate-900 placeholder:text-slate-400 ${accent}`}
+                placeholder="e.g., Suzanne Collins"
+                className={`text-xs mt-1 w-full rounded border border-sky-300 bg-white p-2 text-slate-900 placeholder:text-slate-400 ${accent}`}
               />
             </label>
           </div>
@@ -154,77 +154,111 @@ export default function AddBookModal({ open, onClose, onAdded }: Props) {
               rows={3}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder="Why did this book matter to you?"
-              className={`mt-1 w-full rounded border border-amber-300 bg-white p-2 text-slate-900 placeholder:text-slate-400 ${accent}`}
+              placeholder="A brief description or notes about the book"
+              className={`text-xs mt-1 w-full rounded border border-amber-300 bg-white p-2 text-slate-900 placeholder:text-slate-400 ${accent}`}
             />
           </label>
 
           {/* Genres / Keywords */}
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <label className="text-sm font-medium">
-              Genres (comma separated)
+              Genres
               <input
                 value={genres}
                 onChange={(e) => setGenres(e.target.value)}
-                placeholder="architecture, theory"
-                className={`mt-1 w-full rounded border border-emerald-300 bg-white p-2 text-slate-900 placeholder:text-slate-400 ${accent}`}
+                placeholder="sci-fi, non-fiction…"
+                className={`text-xs mt-1 w-full rounded border border-emerald-300 bg-white p-2 text-slate-900 placeholder:text-slate-400 ${accent}`}
               />
             </label>
             <label className="text-sm font-medium">
-              Keywords (comma separated)
+              Keywords
               <input
                 value={keywords}
                 onChange={(e) => setKeywords(e.target.value)}
-                placeholder="urbanism, form, OMA"
-                className={`mt-1 w-full rounded border border-pink-300 bg-white p-2 text-slate-900 placeholder:text-slate-400 ${accent}`}
+                placeholder="poetic, moody, dark…"
+                className={`text-xs mt-1 w-full rounded border border-pink-300 bg-white p-2 text-slate-900 placeholder:text-slate-400 ${accent}`}
               />
             </label>
           </div>
 
-          {/* Spine mode switch */}
+          {/* Spine mode switch (a11y-compliant tabs) */}
           <div className="rounded-xl border border-slate-200 p-3">
-            <div className="mb-3 flex items-center gap-2 text-sm font-medium">
+            <div className="mb-3 flex items-center gap-1 text-sm font-medium">
               <span>Spine</span>
-              <div role="tablist" aria-label="Spine input mode" className="ml-3 inline-flex rounded-lg bg-slate-100 p-1">
+
+              <div
+                role="tablist"
+                aria-label="Spine input mode"
+                className="mt-2 ml-3 inline-flex rounded-lg bg-slate-100 p-1"
+              >
+                {/* Upload tab */}
                 <button
+                  id="spine-tab-upload"
                   type="button"
                   role="tab"
-                  aria-selected={mode === 'upload'}
+                  aria-selected={mode === 'upload' ? 'true' : 'false'}
+                  aria-controls="spine-panel-upload"
+                  tabIndex={mode === 'upload' ? 0 : -1}
                   onClick={() => onSwitch('upload')}
-                  className={`rounded-md px-3 py-1 text-sm ${mode === 'upload' ? 'bg-white shadow ring-1 ring-black/10' : 'text-slate-600 hover:text-slate-900'}`}
+                  className={`rounded-md px-3 py-1 text-sm ${
+                    mode === 'upload'
+                      ? 'bg-white shadow ring-1 ring-black/10'
+                      : 'text-slate-600 hover:text-slate-900'
+                  }`}
                 >
-                  Upload image
+                  Upload Cover
                 </button>
+
+                {/* Generate tab */}
                 <button
+                  id="spine-tab-generate"
                   type="button"
                   role="tab"
-                  aria-selected={mode === 'generate'}
+                  aria-selected={mode === 'generate' ? 'true' : 'false'}
+                  aria-controls="spine-panel-generate"
+                  tabIndex={mode === 'generate' ? 0 : -1}
                   onClick={() => onSwitch('generate')}
-                  className={`rounded-md px-3 py-1 text-sm ${mode === 'generate' ? 'bg-white shadow ring-1 ring-black/10' : 'text-slate-600 hover:text-slate-900'}`}
+                  className={`rounded-md px-3 py-1 text-sm ${
+                    mode === 'generate'
+                      ? 'bg-white shadow ring-1 ring-black/10'
+                      : 'text-slate-600 hover:text-slate-900'
+                  }`}
                 >
-                  Generate spine
+                  Generate Spine
                 </button>
               </div>
             </div>
 
-            {/* Upload mode */}
-            {mode === 'upload' && (
-              <label className="block text-sm font-medium">
+            {/* Upload panel */}
+            <div
+              role="tabpanel"
+              id="spine-panel-upload"
+              aria-labelledby="spine-tab-upload"
+              hidden={mode !== 'upload'}
+              className="pt-1"
+            >
+              <label className="mt-3 block text-sm font-medium">
                 Spine image
                 <input
                   type="file"
                   accept="image/*"
                   onChange={(e) => setSpineFile(e.target.files?.[0] ?? null)}
-                  className="mt-1 block w-full text-sm file:mr-4 file:rounded file:border-0 file:bg-slate-900 file:px-3 file:py-2 file:text-white hover:file:bg-slate-800"
+                  className="mt-2 block w-full text-sm file:mr-4 file:rounded file:border-0 file:bg-slate-900 file:px-3 file:py-2 file:text-white hover:file:bg-slate-800"
                 />
               </label>
-            )}
+            </div>
 
-            {/* Generate mode */}
-            {mode === 'generate' && (
-              <div className="grid gap-3 sm:grid-cols-[auto_1fr]">
+            {/* Generate panel */}
+            <div
+              role="tabpanel"
+              id="spine-panel-generate"
+              aria-labelledby="spine-tab-generate"
+              hidden={mode !== 'generate'}
+              className="pt-1"
+            >
+              <div className="grid gap-9 sm:grid-cols-[auto_1fr]">
                 <div className="flex items-center gap-4">
-                  <label className="flex items-center gap-2 text-sm">
+                  <label className="flex items-center gap-3 text-sm">
                     <span>Color</span>
                     <input
                       type="color"
@@ -234,7 +268,7 @@ export default function AddBookModal({ open, onClose, onAdded }: Props) {
                       aria-label="Spine color"
                     />
                   </label>
-                  <label className="flex items-center gap-2 text-sm">
+                  <label className="flex items-center gap-3 text-sm">
                     <span>Label</span>
                     <input
                       type="color"
@@ -248,16 +282,17 @@ export default function AddBookModal({ open, onClose, onAdded }: Props) {
 
                 <div className="flex items-end gap-3">
                   <div
-                    className="h-28 w-3 rounded shadow-sm ring-1 ring-slate-200"
+                    className="h-28 w-4 rounded shadow-sm ring-1 ring-slate-200"
                     style={{ background: spineColor }}
                     aria-label="Spine preview"
                     title="Spine preview"
                   />
-                  <div className="text-xs text-slate-500">Preview</div>
+                  <div className="text-xs text-slate-500">Spine Preview</div>
                 </div>
               </div>
-            )}
+            </div>
           </div>
+
 
           {err && <div className="rounded bg-rose-50 p-2 text-rose-700">{err}</div>}
         </div>

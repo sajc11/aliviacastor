@@ -50,7 +50,7 @@ export default function CabinetOverlay(){
                     value={query}
                     onChange={(e)=>setQuery(e.target.value)}
                     placeholder="Search subpages…"
-                    className="w-full rounded-full px-3 py-2 outline-none"
+                    className="w-full rounded-full px-3 py-2 outline-none bg-neutral-300 placeholder:text-slate-900"
                   />
                 </div>
                 <FileIndexNav query={query} />
