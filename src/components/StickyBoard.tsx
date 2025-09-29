@@ -14,6 +14,6 @@ export default function StickyBoard(){
         <div className="text-[11px] leading-snug">{n.body}</div>
       </div>))}</div>
     <aside className="rounded-2xl border p-4"><h3 className="font-semibold">Leave a note</h3>
-      <textarea value={body} onChange={e=>setBody(e.target.value)} rows={5} className="mt-2 w-full rounded-md border p-2"/><button onClick={post} className="mt-2 w-full rounded-md bg-slate-900 px-4 py-2 text-white">Post</button></aside>
+      <textarea value={body} onChange={e=>setBody(e.target.value)} rows={5} className="mt-2 w-full rounded-md border p-2"/><button onClick={post} className="mt-2 w-full rounded-md bg-neutral-200 px-4 py-2 text-white">Post</button></aside>
   </div>);
 }

@@ -180,7 +180,7 @@ export default function JournalEditor() {
           if (url) addSticker(url);
           else if (e.dataTransfer.files?.length) addImageFromFile(e.dataTransfer.files[0]);
         }}
-        className="overflow-auto rounded-2xl border bg-white p-2 dark:bg-slate-900"
+        className="overflow-auto rounded-2xl border bg-white p-2 dark:bg-neutral-500"
       >
         <Stage
           width={baseW}

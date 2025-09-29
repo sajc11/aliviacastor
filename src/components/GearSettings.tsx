@@ -23,7 +23,7 @@ export default function GearSettings() {
       <button
         aria-label="Settings"
         onClick={() => setOpen(v => !v)}
-        className="rounded-full bg-zinc-200 px-2 py-2 text-white  shadow-md transition hover:scale-105 hover:bg-white/20 hover:bg-zinc-300 border-slate-400"
+        className="rounded-full bg-zinc-200 px-2 py-2 text-white hover:bg-zinc-300 "
       >
         ⚙️
       </button>

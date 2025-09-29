@@ -42,7 +42,7 @@ export default function DvdShelf(){
   }
 
   return (<>
-    <div className="relative overflow-x-auto whitespace-nowrap rounded-2xl border bg-white p-6 dark:bg-slate-900">
+    <div className="relative overflow-x-auto whitespace-nowrap rounded-2xl border bg-white p-6 dark:bg-neutral-200">
       {dvds.map(b=>(
         <button key={b.id} onClick={()=>setActive(b)} className="mr-4 inline-block align-bottom">
           <div className="relative">
@@ -60,7 +60,7 @@ export default function DvdShelf(){
 
     {active && (
       <div className="fixed inset-0 z-[90] grid place-items-center bg-black/50 p-4" onClick={()=>setActive(null)}>
-        <div className="max-w-xl rounded-2xl bg-white p-6 shadow-xl dark:bg-slate-900" onClick={e=>e.stopPropagation()}>
+        <div className="max-w-xl rounded-2xl bg-white p-6 shadow-xl dark:bg-neutral-200" onClick={e=>e.stopPropagation()}>
           <div className="flex gap-4">
             {active.cover_url && <img src={active.cover_url} className="px-thumb h-40 w-28 rounded object-cover bg-white"/>}
             <div className="min-w-0">
@@ -85,7 +85,7 @@ export default function DvdShelf(){
           </div>
 
           <div className="mt-4 text-right">
-            <button onClick={()=>setActive(null)} className="rounded bg-slate-900 px-3 py-1 text-white dark:bg-white dark:text-slate-900">Close</button>
+            <button onClick={()=>setActive(null)} className="rounded bg-neutral-200 px-3 py-1 text-white dark:bg-white dark:text-slate-900">Close</button>
           </div>
         </div>
       </div>

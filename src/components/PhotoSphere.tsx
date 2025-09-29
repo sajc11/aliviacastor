@@ -6,7 +6,7 @@ export default function PhotoSphere(){
   useEffect(()=>{ (async()=>{ const urls=await listPhotos(); setImgs(urls.length?urls:Array.from({length:32},()=>'/og-cover.png')); })(); },[]);
   const rings=6, perRing=10, radius=220; const items=imgs.slice(0,rings*perRing);
   return (
-    <div className="relative mx-auto grid h-[60vh] place-items-center overflow-hidden rounded-3xl border bg-slate-900">
+    <div className="relative mx-auto grid h-[60vh] place-items-center overflow-hidden rounded-3xl border bg-neutral-200">
       <div className="relative h-[520px] w-[520px] [transform-style:preserve-3d] animate-[spin_40s_linear_infinite]">
         {Array.from({length:rings}).map((_,r)=>{
           const phi=Math.PI*(r/(rings-1)-0.5); const y=radius*Math.sin(phi); const rr=Math.cos(phi)*radius;

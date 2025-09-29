@@ -43,7 +43,7 @@ export default function MiniPlayer(){
           <button onClick={next} className="rounded px-2 py-1 hover:bg-slate-200">⏭</button>
         </div>
       </div>
-      {ui.visualizer && <canvas ref={cvRef} width={320} height={80} className="mt-2 w-full rounded bg-slate-900" />}
+      {ui.visualizer && <canvas ref={cvRef} width={320} height={80} className="mt-2 w-full rounded bg-neutral-200" />}
     </div>
   );
 }

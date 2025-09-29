@@ -63,7 +63,7 @@ body[data-mode='personal'] .glitch-y2k::after{  transform:translateX(-1px); colo
 
 body.y2k header{
   background: radial-gradient(100% 100% at 50% 0%, #151A3F 0%, #0b0f2e 40%, #070a20 100%);
-  border-bottom:2px solid #000; box-shadow: inset 0 -2px 0 rgba(255,255,255,.12);
+  border-bottom:2px solid #e4e3e6; box-shadow: inset 0 -2px 0 rgba(255,255,255,.12);
 }
 .y2k .y2k-chrome{
   background: linear-gradient(180deg,#d8e6ff 0%,#a8baff 35%,#7ba0ff 50%,#e7f0ff 100%);

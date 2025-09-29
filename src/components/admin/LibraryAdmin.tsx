@@ -59,7 +59,7 @@ export default function LibraryAdmin(){
         <label className="flex-1 rounded border p-2 text-sm">Spine<input type="file" className="mt-1 block w-full" onChange={e=>setSpine(e.target.files?.[0]||null)} /></label>
         <label className="flex-1 rounded border p-2 text-sm">Cover<input type="file" className="mt-1 block w-full" onChange={e=>setCover(e.target.files?.[0]||null)} /></label>
       </div>
-      <button onClick={submit} className="rounded bg-slate-900 px-4 py-2 text-white">Add</button>
+      <button onClick={submit} className="rounded bg-neutral-200 px-4 py-2 text-white">Add</button>
       <div className="text-sm">{msg}</div>
     </div>
   );
